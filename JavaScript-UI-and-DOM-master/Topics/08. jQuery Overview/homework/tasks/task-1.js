@@ -1,8 +1,8 @@
 /* globals $ */
 
-/* 
+/*
 
-Create a function that takes a selector and COUNT, then generates inside a UL with COUNT LIs:   
+Create a function that takes a selector and COUNT, then generates inside a UL with COUNT LIs:
   * The UL must have a class `items-list`
   * Each of the LIs must:
     * have a class `list-item`
@@ -16,13 +16,13 @@ Create a function that takes a selector and COUNT, then generates inside a UL wi
         * Valid COUNT values:
           * 1, 2, 3, '1', '4', '1123'
         * Invalid COUNT values:
-          * '123px' 'John', {}, [] 
+          * '123px' 'John', {}, []
 */
 
 function solve() {
-  return function (selector, count) {
-   
-  };
+    return function(selector, count) {
+
+    };
 };
 
 module.exports = solve;
