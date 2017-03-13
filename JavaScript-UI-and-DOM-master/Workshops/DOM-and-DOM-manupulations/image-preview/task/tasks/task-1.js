@@ -35,7 +35,7 @@ function solve() {
             img,
             df, div, title,
             allDivs,
-            allImages, allTitles, imgPreview, listImg;
+            allImages, allTitles, imgPreview, listImg, input, label;
 
         VALIDATION.validateSelector(id);
         VALIDATION.validateItems(items);
@@ -55,12 +55,13 @@ function solve() {
         // create div
         div = document.createElement('div');
 
-        // styl
+        // style
         div.style.position = 'relative';
-        div.style.width = '35%';
-        div.style.height = '35%';
+        div.style.width = '70%';
         div.style.display = 'block';
-        div.style.borderRadius = '26px'
+        div.style.margin = '0 auto';
+        div.style.padding = '10px';
+        div.style.borderRadius = '5px';
 
 
         // create title
@@ -72,15 +73,34 @@ function solve() {
         //create image node
         img = document.createElement('img');
 
+        // create input 
+        input = document.createElement('input');
+        input.id = 'input';
+        input.style.display = 'block';
+        input.style.width = '70%';
+        input.style.margin = '10px auto';
+
+        // create label 
+        label = document.createElement('label');
+        label.setAttribute("for", 'input');
+        label.style.display = 'block';
+        label.style.textAlign = 'center';
+        label.innerHTML = 'Filter';
+
         // style
-        img.style.width = '50%';
-        img.style.height = '50%';
-        img.style.borderRadius = '25px';
-        img.style.margin = '0 auto';
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        img.style.borderRadius = '5px';
 
         // create listImg
         listImg = document.createElement('div');
+        listImg.appendChild(label);
+        listImg.appendChild(input);
+        // style
         listImg.className = 'list-image';
+        listImg.style.width = '30%';
+        listImg.style.float = 'right';
+
 
         // Get Items Properties
         for (var i = 0; i < items.length; i++) {
@@ -111,8 +131,62 @@ function solve() {
 
         console.log(imgPreview[0]);
 
-        imgPreview[0].style.width = '65%';
-        imgPreview[0].style.height = '65%';
+        imgPreview[0].style.width = '42%';
+        imgPreview[0].style.float = 'left';
+        imgPreview[0].style.padding = '5% 14%';
+        imgPreview[0].style.fontSize = '40px';
+
+
+        // Events
+        allImages = document.querySelectorAll('img');
+        for (var i = 0; i < allImages.length; i++) {
+            allImages[i].addEventListener('mouseover', onHover, false);
+            allImages[i].addEventListener('mouseout', unHover, false);
+            allImages[i].addEventListener('click', onClick, false);
+        }
+
+        input.addEventListener('input', search, false);
+        //  hovered
+        function onHover(el) {
+            el.target.parentElement.style.backgroundColor = '#ffb0cb';
+        }
+
+        // unhovered
+        function unHover(el) {
+            console.log(el.target.src)
+            el.target.parentElement.style.backgroundColor = '';
+        }
+
+        // onclick
+        function onClick(el) {
+            var getEl = el.target;
+            var alt = imgPreview[0].children[1].alt;
+            var src = imgPreview[0].children[1].src;
+
+            imgPreview[0].children[0].innerHTML = getEl.alt;
+            imgPreview[0].children[1].alt = getEl.alt;
+            imgPreview[0].children[1].src = getEl.src;
+
+            // Change Content
+            getEl.previousSibling.innerHTML = alt;
+            getEl.alt = alt;
+            getEl.src = src;
+        }
+
+        // search
+        function search(pattern) {
+            var value = pattern.target.value;
+
+            for (var i = 0; i < allImages.length; i++) {
+                if (allImages[i].alt.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                    allImages[i].parentElement.style.display = 'block';
+                }
+                if (value === '') {
+                    allImages[i].parentElement.style.display = 'block';
+                }
+                allImages[i].parentElement.style.display = 'none';
+            }
+        }
 
     };
 }
