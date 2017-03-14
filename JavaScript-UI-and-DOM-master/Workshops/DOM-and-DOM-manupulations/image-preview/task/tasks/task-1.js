@@ -29,13 +29,11 @@ function solve() {
         };
 
         // Variables
-        var getSelector,
-            id = selector,
+        var id = selector,
             root,
             img,
             df, div, title,
-            allDivs,
-            allImages, allTitles, imgPreview, listImg, input, label;
+            allImages, imgPreview, imgPreviewContent, listImg, input, label;
 
         VALIDATION.validateSelector(id);
         VALIDATION.validateItems(items);
@@ -73,14 +71,14 @@ function solve() {
         //create image node
         img = document.createElement('img');
 
-        // create input 
+        // create input
         input = document.createElement('input');
         input.id = 'input';
         input.style.display = 'block';
         input.style.width = '70%';
         input.style.margin = '10px auto';
 
-        // create label 
+        // create label
         label = document.createElement('label');
         label.setAttribute("for", 'input');
         label.style.display = 'block';
@@ -101,6 +99,9 @@ function solve() {
         listImg.style.width = '30%';
         listImg.style.float = 'right';
 
+        // image preview
+        imgPreviewContent = document.createElement('div');
+        imgPreviewContent.className = 'image-preview';
 
         // Get Items Properties
         for (var i = 0; i < items.length; i++) {
@@ -116,12 +117,12 @@ function solve() {
             cloneDiv.appendChild(cloneImg);
 
             if (i === 0) {
-                cloneDiv.className = 'image-preview';
-                df.appendChild(cloneDiv);
-            } else {
-                listImg.appendChild(cloneDiv);
-                df.appendChild(listImg);
+                imgPreviewContent.appendChild(cloneDiv);
             }
+            listImg.appendChild(cloneDiv);
+            df.appendChild(listImg);
+            df.appendChild(imgPreviewContent);
+
         }
 
         root.appendChild(df);
@@ -138,7 +139,7 @@ function solve() {
 
 
         // Events
-        allImages = document.querySelectorAll('img');
+        allImages = document.querySelectorAll('.list-image img');
         for (var i = 0; i < allImages.length; i++) {
             allImages[i].addEventListener('mouseover', onHover, false);
             allImages[i].addEventListener('mouseout', unHover, false);
@@ -160,17 +161,16 @@ function solve() {
         // onclick
         function onClick(el) {
             var getEl = el.target;
-            var alt = imgPreview[0].children[1].alt;
-            var src = imgPreview[0].children[1].src;
+            console.log(imgPreview);
+            debugger;
+            var alt = imgPreview[0].firstElementChild.children[1].alt;
+            var src = imgPreview[0].firstElementChild.children[1].src;
+            console.log(imgPreview[0].children[1]);
 
-            imgPreview[0].children[0].innerHTML = getEl.alt;
-            imgPreview[0].children[1].alt = getEl.alt;
-            imgPreview[0].children[1].src = getEl.src;
+            imgPreview[0].firstElementChild.children[0].innerHTML = getEl.alt;
+            imgPreview[0].firstElementChild.children[1].alt = getEl.alt;
+            imgPreview[0].firstElementChild.children[1].src = getEl.src;
 
-            // Change Content
-            getEl.previousSibling.innerHTML = alt;
-            getEl.alt = alt;
-            getEl.src = src;
         }
 
         // search
@@ -180,15 +180,17 @@ function solve() {
             for (var i = 0; i < allImages.length; i++) {
                 if (allImages[i].alt.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                     allImages[i].parentElement.style.display = 'block';
+                } else {
+                    allImages[i].parentElement.style.display = 'none';
                 }
                 if (value === '') {
                     allImages[i].parentElement.style.display = 'block';
                 }
-                allImages[i].parentElement.style.display = 'none';
+
             }
         }
 
     };
 }
 
-// module.exports = solve;
+module.exports = solve;
