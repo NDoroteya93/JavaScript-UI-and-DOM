@@ -52,7 +52,7 @@ function solve() {
 
         // create div
         div = document.createElement('div');
-
+        div.className = 'image-container';
         // style
         div.style.position = 'relative';
         div.style.width = '70%';
@@ -117,7 +117,10 @@ function solve() {
             cloneDiv.appendChild(cloneImg);
 
             if (i === 0) {
-                imgPreviewContent.appendChild(cloneDiv);
+                var cloneFirstImage = cloneImg.cloneNode(true);
+                var cloneFirstTitle = cloneTitle.cloneNode(true);
+                imgPreviewContent.appendChild(cloneFirstTitle);
+                imgPreviewContent.appendChild(cloneFirstImage);
             }
             listImg.appendChild(cloneDiv);
             df.appendChild(listImg);
@@ -129,8 +132,6 @@ function solve() {
 
         // Style image-preview
         imgPreview = document.getElementsByClassName('image-preview');
-
-        console.log(imgPreview[0]);
 
         imgPreview[0].style.width = '42%';
         imgPreview[0].style.float = 'left';
@@ -154,22 +155,18 @@ function solve() {
 
         // unhovered
         function unHover(el) {
-            console.log(el.target.src)
             el.target.parentElement.style.backgroundColor = '';
         }
 
         // onclick
         function onClick(el) {
             var getEl = el.target;
-            console.log(imgPreview);
-            debugger;
-            var alt = imgPreview[0].firstElementChild.children[1].alt;
-            var src = imgPreview[0].firstElementChild.children[1].src;
-            console.log(imgPreview[0].children[1]);
+            var alt = imgPreview[0].children[1].alt;
+            var src = imgPreview[0].children[1].src;
 
-            imgPreview[0].firstElementChild.children[0].innerHTML = getEl.alt;
-            imgPreview[0].firstElementChild.children[1].alt = getEl.alt;
-            imgPreview[0].firstElementChild.children[1].src = getEl.src;
+            imgPreview[0].children[0].innerHTML = getEl.alt;
+            imgPreview[0].children[1].alt = getEl.alt;
+            imgPreview[0].children[1].src = getEl.src;
 
         }
 
@@ -192,5 +189,42 @@ function solve() {
 
     };
 }
+// var result = solve();
+// var items = [],
+//     count = 5,
+//     i,
+//     id = 'root';
+// for (i = 0; i < count; i += 1) {
+//     items.push({
+//         title: `Image #${i}`,
+//         url: `http://test-url-${i}.com`
+//     });
+// }
+// document.body.innerHTML = `<div id="${id}"></div>`;
+// var fakejQuery = $;
+// $ = undefined;
+// result('#' + id, items);
+// $ = fakejQuery;
 
+// var $root = $('#' + id);
+
+// var $imageContainers = $root.find('.image-container');
+
+// var foundContents = 0;
+
+// $imageContainers.each(function(index, imageContainer) {
+//     var isFound = false;
+//     $(imageContainer).find('*')
+//         .each(function(i, node) {
+//             if (isFound) {
+//                 return;
+//             }
+//             if ($(node).html() === items[index].title) {
+//                 foundContents += 1;
+//                 isFound = true;
+//             }
+//         });
+// });
+
+// console.log(foundContents) //(count);
 module.exports = solve;
