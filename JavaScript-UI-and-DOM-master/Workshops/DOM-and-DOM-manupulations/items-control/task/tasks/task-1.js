@@ -4,7 +4,7 @@
 function solve() {
     return function(selector, isCaseSensitive) {
 
-        // validation 
+        // validation
         var VALIDATION = {
                 isString: function(str) {
                     if (typeof str !== 'string') {
@@ -22,7 +22,7 @@ function solve() {
                     }
                 }
             }
-            // parameters     
+            // parameters
         var element, addElement, addButton, listItem, item, removeElement, searchElement, input, inputAddTxt, resultControl, allItems, df;
 
 
@@ -58,7 +58,6 @@ function solve() {
         //create list
         listItem = document.createElement('ul');
         listItem.className = 'items-list';
-        df.appendChild(listItem);
 
         // item
         item = document.createElement('li');
@@ -69,17 +68,16 @@ function solve() {
 
         function onClick() {
             var cloneItem = item.cloneNode(true);
+            var cloneButton = addButton.cloneNode(true);
             cloneItem.innerHTML = inputAddTxt.value;
+            cloneButton.innerHTML = 'X';
             inputAddTxt.value = '';
+
+            listItem.appendChild(cloneButton);
             listItem.appendChild(cloneItem);
+            removeElement = document.getElementsByClassName('button');
+            console.log(removeElement);
         }
-
-
-        ////////////////////// Remove Elements /////////////////////////////////
-        resultControl = document.createElement('div');
-        resultControl.className = 'result-controls';
-
-
 
         ////////////////////// Search Elements /////////////////////////////////
 
@@ -97,30 +95,56 @@ function solve() {
         function search(pattern) {
             var value = pattern.target.value;
             allItems = document.getElementsByClassName('list-item');
-            console.log(allItems);
+
 
             for (var i = 0; i < allItems.length; i++) {
 
                 if (!isCaseSensitive) {
                     if (allItems[i].innerHTML.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-                        allItems[i].parentElement.style.display = '';
+                        allItems[i].style.display = '';
                     } else {
-                        allItems[i].parentElement.style.display = 'none';
+                        allItems[i].style.display = 'none';
                     }
                 } else {
                     if (allItems[i].innerHTML.indexOf(value) >= 0) {
-                        allItems[i].parentElement.style.display = '';
+                        allItems[i].style.display = '';
                     } else {
-                        allItems[i].parentElement.style.display = 'none';
+                        allItems[i].style.display = 'none';
                     }
                 }
                 if (value === '') {
-                    allItems[i].parentElement.style.display = '';
+                    allItems[i].style.display = '';
                 }
 
             }
         }
         df.appendChild(input);
+
+        ////////////////////// Remove Elements /////////////////////////////////
+        resultControl = document.createElement('div');
+        resultControl.className = 'result-controls';
+        resultControl.appendChild(listItem);
+        df.appendChild(resultControl);
+
+
+        removeElement = document.getElementsByClassName('button');
+        // console.log('GO' + removeElement);
+        // for (var i = 0; i < removeElement.length; i++) {
+        //     debugger;
+        listItem.addEventListener('click', remove, false);
+        // }
+        // remove
+        function remove(ev) {
+            debugger;
+            var item = ev.target;
+            var next = item;
+            console.log(item && item.parentElement.className === 'list-item');
+            if (item && item.parentElement) {
+                item.removeChild(item.parentElement);
+            }
+
+        }
+
 
 
 
