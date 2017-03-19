@@ -10,7 +10,8 @@ $.fn.colorpicker = function() {
 
     // create div 
     var $div = $('<div/>');
-    $div.addClass('colorpicker-container');
+    $div.addClass('colorpicker-container')
+        .addClass('hidden');
     $this.append($div);
 
     // close button
@@ -98,6 +99,25 @@ $.fn.colorpicker = function() {
     }
 
     // Events
+
+    $showBtn.on('click', function() {
+        debugger;
+        if ($div.hasClass('hidden')) {
+            $div.removeClass('hidden');
+        } else {
+            $div.addClass('hidden');
+        }
+    });
+
+    // close btn 
+    $closeBtn.on('click', function() {
+        $div.addClass('hidden');
+    })
+
+    // change cursor
+    $("canvas").css('cursor', 'url(./imgs/cursor.png),auto');
+
+    // get color on click
     $div.on('click', '#canvas', function(e) {
         var pos = findPos(this);
         var x = e.pageX - pos.x;
@@ -112,6 +132,7 @@ $.fn.colorpicker = function() {
     });
 
     $div.on('input', $hexInput, function(e) {
+        debugger;
         var $val = $(this).val();
         $colorContainer.css('background', $val);
         $rgbInput.val(hexToRgb($val))

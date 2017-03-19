@@ -49,5 +49,19 @@ canvas {
     margin: -27px 7px;
 }
 
+.hidden {
+    display: none;
+}
 
+.showBtn {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-image: url(./imgs/icon.jpg);
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
 }
