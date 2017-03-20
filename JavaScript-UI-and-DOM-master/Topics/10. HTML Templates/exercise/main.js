@@ -15,10 +15,15 @@
 
 var hbTemplate = `
 <ul>
+{{#if students.length}}
+<p>First Student is {{students.[0].name}}</p>
 {{#students}}
     <li>{{name}} is {{age}} old</li>
 {{/students}}
 </ul>
+{{else}}
+    <p>No Students</p>
+{{/if}}
 `;
 
 var template = Handlebars.compile(hbTemplate);
