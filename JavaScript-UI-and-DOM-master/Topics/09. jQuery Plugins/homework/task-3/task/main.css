@@ -1,0 +1,89 @@
+body, section, article, div, a, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    width: 100%;
+    padding: 1em;
+}
+
+section article.items-section {
+    width: 15%;
+    float: left;
+    border: 2px solid #778999;
+    border-right: 0;
+    border-radius: 15px 0 0;
+}
+
+section article.items-section:last-child {
+    border-right: 2px solid #778999;
+}
+
+section article.items-section strong {
+    display: inline-block;
+    margin-bottom: 1em;
+    font-size: 18px;
+    border-bottom: 2px solid #778999;
+    width: 100%;
+    text-align: center;
+}
+
+section article.items-section div.add-item-wrapper {
+    height: 2em;
+}
+
+section article.items-section div.add-item-wrapper a.add-btn {
+    display: none;
+}
+
+section article.items-section div.add-item-wrapper a.add-btn:before {
+    content: '';
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    background-size: cover;
+    background-image: url('./imgs/plus.png');
+}
+
+section article.items-section div.add-item-wrapper input.add-input {
+    height: 1.5em;
+    width: 60%;
+    margin: 0 20%;
+    display: none;
+}
+
+section article.items-section div.add-item-wrapper a.add-btn.visible, section article.items-section div.add-item-wrapper input.add-input.visible {
+    display: inline-block;
+    margin-left: 20%;
+}
+
+section article.items-section ul {
+    list-style: none;
+    margin-top: 5%;
+    background-color: #dae7f2;
+    padding: 10%;
+    height: 100%;
+}
+
+section article.items-section ul li {
+    margin-top: .5em;
+    height: 1.5em;
+}
+
+section article.items-section ul li:hover {
+    background-color: #778899;
+    cursor: pointer;
+}
+
+section article.items-section ul li>a {
+    color: #2a577c;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+section article.items-section ul li>a:hover {
+    color: white;
+}

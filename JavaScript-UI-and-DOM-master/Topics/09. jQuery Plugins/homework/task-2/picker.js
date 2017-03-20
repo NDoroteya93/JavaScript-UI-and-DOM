@@ -8,7 +8,7 @@ $.fn.colorpicker = function() {
     $showBtn.addClass('showBtn');
     $this.append($showBtn);
 
-    // create div 
+    // create div
     var $div = $('<div/>');
     $div.addClass('colorpicker-container')
         .addClass('hidden');
@@ -19,7 +19,7 @@ $.fn.colorpicker = function() {
         .addClass('closeBtn')
         .appendTo($div);
 
-    // create canvas 
+    // create canvas
     $('<canvas>').attr({
         id: 'canvas'
     }).css({
@@ -91,11 +91,8 @@ $.fn.colorpicker = function() {
 
     function hexToRgb(hex) {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
+        var rgb = parseInt(result[1], 16) + ',' + parseInt(result[2], 16) + ',' + parseInt(result[3], 16);
+        return rgb;
     }
 
     // Events
@@ -109,7 +106,7 @@ $.fn.colorpicker = function() {
         }
     });
 
-    // close btn 
+    // close btn
     $closeBtn.on('click', function() {
         $div.addClass('hidden');
     })
@@ -131,11 +128,20 @@ $.fn.colorpicker = function() {
         $rgbInput.val(p[0] + ',' + p[1] + ',' + p[2]);
     });
 
-    $div.on('input', $hexInput, function(e) {
-        debugger;
-        var $val = $(this).val();
+    $hexInput.on('input', function(e) {
+        var $this = $(this);
+        var $val = $this.val();
         $colorContainer.css('background', $val);
-        $rgbInput.val(hexToRgb($val))
+        $rgbInput.val(hexToRgb($val));
+
+    });
+
+    $rgbInput.on('input', function(e) {
+        var $this = $(this);
+        var $val = $this.val().split(',');
+        var hex = "#" + ("000000" + rgbToHex($val[0], $val[1], $val[2])).slice(-6);
+        $colorContainer.css('background', hex);
+        $hexInput.val(hex);
     });
 
 
