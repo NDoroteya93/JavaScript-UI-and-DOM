@@ -6,11 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Templates</title>
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
     <div id="hb-template"> </div>
-    <script id='hb-template-container'>
+    <script id='hb-template-container' type='text/x-handlebars-template'>
+        <!--<ul>
+            {{#if students.length}}
+            <p>First Student is {{students.[0].name}}</p>
+            {{#students}}
+            <li>{{name}} is {{age}} old</li>
+            {{/students}}
+        </ul>
+        {{else}}
+        <p>No Students</p>
+        {{/if}}-->
+        {{#with schoolData.thisYearData.students}} {{#equals length 0}}
+        <p>First Student is {{this.[0].name}}</p>
+        <ul>
+            {{#each this}}
+            <li>{{#displayPerson this}}{{/displayPerson}}</li>
+
+            {{/each}}
+        </ul>
+        {{else}}
+        <p>No Students</p>
+        {{/if}} {{/with}} {{#each obj}} {{@index}} - {{@key}}: '{{this}}' </br>
+        {{/each}}
     </script>
     <script src="../bower_components/handlebars/handlebars.js"></script>
     <script src="./main.js"></script>
