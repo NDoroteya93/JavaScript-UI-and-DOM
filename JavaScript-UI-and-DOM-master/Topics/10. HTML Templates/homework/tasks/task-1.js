@@ -1,5 +1,7 @@
 /* globals $ */
 
+'use strict';
+
 function solve() {
 
     return function(selector) {
