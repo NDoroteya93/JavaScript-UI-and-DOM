@@ -16,21 +16,28 @@ function createBackground(options) {
             this.coordinates.x,
             0
         );
+        context.drawImage(
+            this.image,
+            this.image.width - Math.abs(this.coordinates.x),
+            0
+        );
     }
 
-    function update() {
-        this.coordinates.x -= 5;
 
-        if (this.coordinates.x < -this.image.width + backgroundCanvas.width) {
-            this.coordinates.x = options.width;
+    function update() {
+        this.coordinates.x -= options.speedX;
+
+        if (Math.abs(this.coordinates.x) > this.image.width) {
+            this.coordinates.x = 0;
         }
     }
 
     var background = {
         image: backgroundImg,
+        speedX: options.speedX,
         coordinates: { x: 0, y: 0 },
         render: render,
-        update: update
+        update: update,
     };
 
     return background;

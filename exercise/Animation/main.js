@@ -157,7 +157,8 @@ window.addEventListener('load', function() {
 
     var background = createBackground({
         width: WIDTH,
-        height: HEIGHT
+        height: HEIGHT,
+        speedX: 10
     });
 
     function gameLoop() {
@@ -198,7 +199,7 @@ window.addEventListener('load', function() {
                 .update();
         }
 
-        spawnPokeball();
+        //spawnPokeball();
 
         background.render();
         background.update();
