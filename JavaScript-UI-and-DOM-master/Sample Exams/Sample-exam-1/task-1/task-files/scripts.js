@@ -17,6 +17,29 @@ function createCalendar(selector, events) {
             if (!Array.isArray(events)) {
                 throw new Error('Invalid events array!');
             }
+        },
+        validateElements: function(elements) {
+            if (typeof elements !== 'object') {
+                throw new Error('Invalid elements');
+            }
+            if (!elements.hasOwnProperty('title') || !elements.hasOwnProperty('date') || !elements.hasOwnProperty('time') || !elements.hasOwnProperty('duration')) {
+                throw new Error('Invalid elements');
+            }
+        },
+        validateProp: function(obj) {
+            if (obj.hasOwnProperty('title')) {
+                this.isString(obj.title);
+            }
+
+            if (obj.hasOwnProperty('date')) {
+                if (typeof obj.date !== 'number' || isNaN(obj.date) || obj.date === undefined || obj.date < 1 || obj.date > 30) {
+                    throw new Error('Invalid date');
+                }
+            }
+
+            if (obj.hasOwnProperty('time')) {
+                this.isString(obj.time);
+            }
         }
     }
 
