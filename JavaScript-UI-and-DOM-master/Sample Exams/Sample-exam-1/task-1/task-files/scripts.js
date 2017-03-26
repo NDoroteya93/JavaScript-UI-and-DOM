@@ -38,7 +38,7 @@ function createCalendar(selector, events) {
             }
 
             if (obj.hasOwnProperty('time')) {
-                this.isString(obj.time);
+                this.isString(obj.timeO);
             }
         }
     }
