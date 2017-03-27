@@ -1,95 +1,126 @@
 /* globals document, window, console */
+"use strict";
 
 function solve() {
     return function(selector, initialSuggestions) {
-        "use strict";
-        var element = document.querySelector(selector);
+        const VALIDATION = {
+            isString: function(str) {
+                if (typeof str !== 'string') {
+                    throw new Error('Invalid string!');
+                }
+            },
+            existElement: function(element) {
+                if (element === null) {
+                    throw new Error('Invalid selector!')
+                }
+            },
+            isArray: function(arr) {
+                if (!Array.isArray(arr)) {
+                    throw new Error('Invalid Array!');
+                }
+            }
+        }
+        let element = document.querySelector(selector),
+            suggestionsList = document.querySelector('.suggestions-list'),
+            df = document.createDocumentFragment();
 
-        var tbPattern = element.getElementsByClassName("tb-pattern")[0];
-        var suggestionItems = element.getElementsByClassName("suggestion");
-        var suggestionsList = element.getElementsByClassName("suggestions-list")[0];
-        var btnAdd = element.getElementsByClassName("btn-add")[0];
-        var pattern = "";
+        VALIDATION.isString(selector);
+        VALIDATION.existElement(element);
+        // if exist
+        if (initialSuggestions.length > 0) {
+            VALIDATION.isArray(initialSuggestions);
+            initialSuggestions.forEach(x => VALIDATION.isString(x));
+        }
 
-        var suggestionItemTemplate = document.createElement("li"),
-            suggestionLinkTemplate = document.createElement("a");
+        // create li 
+        let suggestion = document.createElement('li');
+        suggestion.className = 'suggestion';
+        suggestion.style.display = 'none';
 
-        suggestionItemTemplate.className = "suggestion";
+        // suggestion link 
+        let suggestionLink = document.createElement('a');
+        suggestionLink.setAttribute('href', '#');
+        suggestionLink.className = 'suggestion-link';
 
-        suggestionLinkTemplate.className = "suggestion-link";
-        suggestionLinkTemplate.href = "#";
-        suggestionItemTemplate.appendChild(suggestionLinkTemplate);
-        suggestionItemTemplate.style.display = "none";
+        // create list
+        for (let i = 0; i < initialSuggestions.length; i++) {
+            let cloneSuggestion = suggestion.cloneNode(true);
+            let cloneSugestionLink = suggestionLink.cloneNode(true);
+            cloneSuggestion.setAttribute('data-value', initialSuggestions[i]);
+            cloneSugestionLink.innerHTML = initialSuggestions[i];
+            cloneSuggestion.appendChild(cloneSugestionLink);
 
-        var usedSuggestions = {};
+            df.appendChild(cloneSuggestion);
+        }
+        suggestionsList.appendChild(df);
 
-        initialSuggestions = initialSuggestions || [];
 
-        for (var i = 0, len = initialSuggestions.length; i < len; i += 1) {
-            var suggestionString = initialSuggestions[i];
-            if (!usedSuggestions[suggestionString.toLowerCase()]) {
-                suggestionLinkTemplate.innerHTML = suggestionString;
-                var newSuggestion = suggestionItemTemplate.cloneNode(true);
-                suggestionsList.appendChild(newSuggestion);
-                usedSuggestions[suggestionString.toLowerCase()] = true;
+        let allSuggestions = document.querySelectorAll('.suggestion');
+        let allLinks = document.querySelectorAll('.suggestion-link');
+        // serach
+
+        let input = document.querySelector('.tb-pattern');
+        input.addEventListener('input', search, false);
+
+        // add button 
+
+        let addBtn = document.querySelector('.btn-add');
+        addBtn.addEventListener('click', onClick, false);
+
+        // select
+
+        for (var i = 0; i < allLinks.length; i++) {
+            allLinks[i].addEventListener('click', select, false);
+        }
+
+        function search(pattern) {
+
+            var value = pattern.target.value;
+            for (var i = 0; i < allSuggestions.length; i++) {
+                if (allSuggestions[i].getAttribute('data-value').toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                    allSuggestions[i].style.display = '';
+                } else {
+                    allSuggestions[i].style.display = 'none';
+                }
+                if (value === '') {
+                    allSuggestions[i].style.display = 'none';
+                }
+
             }
         }
 
-        suggestionsList.addEventListener("click", function(ev) {
-            var btn = ev.target,
-                text;
-            if (btn.className.indexOf("suggestion-link") < 0) {
-                return;
-            }
+        function select(e) {
+            let selectElement = e.target.innerHTML;
+            input.value = selectElement;
+        }
 
-            text = btn.innerHTML;
-            tbPattern.value = text;
-            ev.preventDefault();
-        });
-
-        suggestionsList.style.display = "none";
-
-        btnAdd.addEventListener("click", function() {
-            var value = tbPattern.value;
-            tbPattern.value = "";
-
-            suggestionsList.style.display = "none";
-
-            if (!usedSuggestions[value.toLowerCase()]) {
-                suggestionLinkTemplate.innerHTML = value;
-                suggestionsList.appendChild(suggestionItemTemplate.cloneNode(true));
-                usedSuggestions[value.toLowerCase()] = true;
-            }
-        });
-
-        tbPattern.addEventListener("input", function() {
-            var suggestionItems = element.getElementsByClassName("suggestion");
-
-            var len = suggestionItems.length,
-                suggestionItem,
-                suggestionText,
-                i;
-
-
-            pattern = this.value.toLowerCase();
-
-            if (pattern === "") {
-                suggestionsList.style.display = "none";
-                return;
-            }
-
-            suggestionsList.style.display = "";
-
-            for (i = 0; i < len; i += 1) {
-                suggestionItem = suggestionItems[i];
-                suggestionText = suggestionItem.getElementsByClassName("suggestion-link")[0];
-                if (suggestionText.innerHTML.toLowerCase().indexOf(pattern) >= 0) {
-                    suggestionItem.style.display = "";
-                } else {
-                    suggestionItem.style.display = "none";
+        function onClick(el) {
+            debugger;
+            let value = input.value,
+                isAdded = false;
+            for (var i = 0; i < allSuggestions.length; i++) {
+                if (allSuggestions[i].getAttribute('data-value') === value) {
+                    isAdded = true;
                 }
             }
-        });
+
+            if (!isAdded) {
+                let cloneSuggestion = suggestion.cloneNode(true);
+                let cloneSugestionLink = suggestionLink.cloneNode(true);
+                cloneSuggestion.setAttribute('data-value', value);
+                cloneSugestionLink.innerHTML = value;
+                cloneSuggestion.appendChild(cloneSugestionLink);
+
+                suggestionsList.appendChild(cloneSuggestion);
+            }
+
+            allSuggestions = document.querySelectorAll('.suggestion');
+            allLinks = document.querySelectorAll('.suggestion-link');
+
+            input.value = '';
+        }
+
+
     };
 }
 
