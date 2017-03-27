@@ -198,10 +198,10 @@ function solve() {
             $picker.removeClass('picker-visible');
         });
 
-        $('.current-date-link').on('click', function(e) {
-            e.stopPropagation();
-            $getDate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+        $('.current-date-link').on('click', function() {
+            let $getDate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
             $input.val($getDate);
+            $picker.removeClass('picker-visible');
         })
 
 
