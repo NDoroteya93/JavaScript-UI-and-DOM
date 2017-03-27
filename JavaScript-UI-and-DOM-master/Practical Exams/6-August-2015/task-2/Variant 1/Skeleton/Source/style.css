@@ -9,7 +9,8 @@
     padding: 5px 10px;
 }
 
-.datepicker-wrapper input.datepicker:focus, .btn:focus {
+.datepicker-wrapper input.datepicker:focus,
+.btn:focus {
     outline: 0;
 }
 
@@ -53,6 +54,7 @@
     color: white;
     border-radius: 25px;
 }
+
 .datepicker-wrapper .picker .controls .btn:hover {
     background-color: #33CC33;
     cursor: pointer;
@@ -67,7 +69,8 @@
     margin-top: -150px;
 }
 
-.datepicker-wrapper .picker .calendar th, td {
+.datepicker-wrapper .picker .calendar th,
+td {
     border: 1px solid black;
     padding: 5px;
     text-align: center;
