@@ -1,20 +1,38 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Task 3 - Handlebars</title>	
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Task 3 - Handlebars</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-	<div id="book-items-container">
-	</div>
-	<div id="book-details-container">
-	</div>
-	<script id="books-list-template" type='text/x-handlebars-template'>
-	</script>
-	<script id="book-details-template" type='text/x-handlebars-template'>
-	</script>
-	<script src="handlebars.min.js"></script>
-	<script src="scripts.js"></script>
+    <div id="book-items-container">
+    </div>
+    <div id="book-details-container">
+    </div>
+    <script id="books-list-template" type='text/x-handlebars-template'>
+        <div class="books-list">
+            {{#if books.length}} {{#each books}}
+            <div class="book-item">
+                <a href="#" data-id="{{this.id}}"><strong class="book-title">{{this.title}}</strong></a>
+                <a href="#" data-id="{{this.id}}"><span class="author">by {{this.author}}</span></a>
+            </div>
+            {{/each}} {{/if}}
+        </div>
+    </script>
+    <script id="book-details-template" type='text/x-handlebars-template'>
+
+        <div id="{{this.id}}" class="book-details">
+            <p class="book-title">{{this.title}}</p>
+            <p class="isbn">{{this.isbn}}</p>
+            <p> Published on <span class="publish-date">{{this.publicationDate}}</span> by <span class="publish-date">{{this.author}}</span></p>
+            <p class="description">{{this.description}}</p>
+        </div>
+    </script>
+    <script src="handlebars.min.js"></script>
+    <script src="scripts.js"></script>
 </body>
+
 </html>

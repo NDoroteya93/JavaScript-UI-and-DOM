@@ -1,4 +1,6 @@
- window.onload = function () {
+ 'use strict';
+
+ window.onload = function() {
      var bookDetailsContainer,
          bookDetailsTemplate,
          booksListContainer,
@@ -66,6 +68,7 @@
      }
 
      function findById(id, items) {
+
          var item,
              i;
          for (i = 0; i < items.length; i += 1) {
@@ -78,16 +81,18 @@
      }
 
      function showBookDetails(id) {
+
          var book;
          book = findById(id, books);
          bookDetailsContainer.innerHTML = bookDetailsTemplate(book);
      }
-     booksListContainer.addEventListener('click', function (ev) {
+     booksListContainer.addEventListener('click', function(ev) {
          var bookItem, target;
          ev = ev || window.event;
          target = ev.target;
          ev.preventDefault();
          bookItem = findParentOfType(target, HTMLAnchorElement, booksListContainer);
+
          if (bookItem === null) {
              return false;
          }
