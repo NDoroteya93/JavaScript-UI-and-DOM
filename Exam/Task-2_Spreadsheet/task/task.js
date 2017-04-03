@@ -24,6 +24,13 @@ function solve() {
         var uppercase = 'abcdefghijklmnopqrstuvwxyz'.split('').map(x => x.toUpperCase());
         var df = $('<div></div>');
         var count = 1;
+        var arrayTable = new Array(rows + 1);
+        arrayTable.fill(0);
+
+        for (var i = 0; i < arrayTable.length; i++) {
+            arrayTable[i] = new Array(columns + 1);
+            arrayTable[i].fill(0);
+        }
 
         VALIDATION.isString(selector);
         var element = $(selector);
@@ -46,19 +53,19 @@ function solve() {
                             .addClass('spreadsheet-header spreadsheet-item')
                             .appendTo(row);
                         if (j === 0) {
-                            th
-                                .attr('data-col', '')
-                                .html('');
+                            th.html('');
+
                         } else {
                             th.html(uppercase[j - 1]);
+                            arrayTable[i][j] = uppercase[j - 1];
                         }
                     } else {
                         if (j === 0) {
                             var th = $('<th></th>')
-                                .attr('data-col', j)
                                 .addClass('spreadsheet-header spreadsheet-item')
                                 .html(count)
                                 .appendTo(row);
+                            arrayTable[i][j] = count;
                             ++count;
                         } else {
                             var td = $('<td></td>')
@@ -78,40 +85,77 @@ function solve() {
             .append(df.html())
             .appendTo(element);
 
-        // $('.spreadsheet-item').on('click', function() {
-        //     // TODO
-        //     // clean STYLE 
-        //     $('.spreadsheet-item').removeClass('selected');
-        //     var $parent = $(this).parents('tr');
-        //     var $this = $(this);
-        //     var dataRow = $parent.attr('data-row');
-        //     var dataCol = $this.attr('data-col');
-        //     if ($this.hasClass('spreadsheet-header')) {
+        $('.spreadsheet-item').on('click', selectCells)
 
-        //         // check if is header
-        //         if ($parent.is(':first-child')) {
-        //             if ($this.is(':empty')) {
-        //                 $('.spreadsheet-item').addClass('selected');
-        //             } else {
-        //                 $('[data-col=' + dataCol + ']').addClass('selected');
-        //                 $('[data-col=0]').addClass('selected');
-        //             }
-
-        //         }
-        //     }
-        //     // cells
-        //     if ($this.hasClass('spreadsheet-cell')) {
-        //         $parent.find('.spreadsheet-header').addClass('selected');
-        //         $('tr[data-row=0] th[data-col=' + dataCol + ']').addClass('selected');
-        //         $this.addClass('selected');
-        //     }
-        // });
-
-        // clicking
-        $('.spreadsheet-cell').on('dblclick', function() {
+        function selectCells() {
+            var col = $(this).parent().children().index($(this));
+            var row = $(this).parent().parent().children().index($(this).parent());
             var $this = $(this);
-            $this.find('input').css('display', '');
+            var $parent = $this.parent();
+            var $firstRow = $(this).closest('table').children('tr:first');
+            // clean style
+            $('.spreadsheet-item').removeClass('selected');
+
+            // left angle
+            if (col === 0 && row === 0) {
+                $('.spreadsheet-item').addClass('selected');
+            }
+
+            // select row
+            if (row > 0 && col === 0) {
+                $parent.find('.spreadsheet-item').addClass('selected');
+                // first row 
+                $firstRow.children('.spreadsheet-item:not(:eq(0))').addClass('selected');
+            }
+
+            // select columns
+            if (row === 0 && col > 0) {
+                for (var i = 0; i <= rows; i++) {
+                    if (i > 0) {
+                        $('table tr').eq(i).find('.spreadsheet-item').eq(0).addClass('selected');
+                    }
+                    $('table tr').eq(i).find('.spreadsheet-item').eq(col).addClass('selected');
+                }
+            }
+
+            // select cell
+            if (row > 0 && col > 0) {
+                $firstRow.find('.spreadsheet-item').eq(col).addClass('selected');
+                $('table tr').eq(row).find('.spreadsheet-item').eq(0).addClass('selected');
+                $('table tr').eq(row).find('.spreadsheet-item').eq(col).addClass('selected');
+            }
+        }
+
+        // dragging 
+        // here is how you can detect dragging in all four directions
+        var isDragging = false;
+        $(".spreadsheet-item").mousedown(function(e) {
+            var previous_x_position = e.pageX;
+            var previous_y_position = e.pageY;
+
+            $(window).mousemove(function(event) {
+                isDragging = true;
+                var x_position = event.pageX;
+                var y_position = event.pageY;
+
+                if (previous_x_position < x_position) {
+                    alert('moving right');
+                } else {
+                    alert('moving left');
+                }
+                if (previous_y_position < y_position) {
+                    alert('moving down');
+                } else {
+                    alert('moving up');
+                }
+                $(window).unbind("mousemove");
+            });
+        }).mouseup(function() {
+            var wasDragging = isDragging;
+            isDragging = false;
+            $(window).unbind("mousemove");
         });
+
 
 
     };
