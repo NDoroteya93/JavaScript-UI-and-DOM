@@ -24,6 +24,13 @@ function solve() {
         var uppercase = 'abcdefghijklmnopqrstuvwxyz'.split('').map(x => x.toUpperCase());
         var df = $('<div></div>');
         var count = 1;
+        var arrayTable = new Array(rows + 1);
+        arrayTable.fill(0);
+
+        for (var i = 0; i < arrayTable.length; i++) {
+            arrayTable[i] = new Array(columns + 1);
+            arrayTable[i].fill(0);
+        }
 
         VALIDATION.isString(selector);
         var element = $(selector);
@@ -46,19 +53,19 @@ function solve() {
                             .addClass('spreadsheet-header spreadsheet-item')
                             .appendTo(row);
                         if (j === 0) {
-                            th
-                                .attr('data-col', '')
-                                .html('');
+                            th.html('');
+
                         } else {
                             th.html(uppercase[j - 1]);
+                            arrayTable[i][j] = uppercase[j - 1];
                         }
                     } else {
                         if (j === 0) {
                             var th = $('<th></th>')
-                                .attr('data-col', j)
                                 .addClass('spreadsheet-header spreadsheet-item')
                                 .html(count)
                                 .appendTo(row);
+                            arrayTable[i][j] = count;
                             ++count;
                         } else {
                             var td = $('<td></td>')
@@ -78,72 +85,77 @@ function solve() {
             .append(df.html())
             .appendTo(element);
 
-        var isDown = false;
-        var firstEl, lastEl;
+        $('.spreadsheet-item').on('click', selectCells)
 
-        // TODO
-        $(document).mousedown(function() {
-                isDown = true; // When mouse goes down, set isDown to true
-            })
-            .mouseup(function() {
-                isDown = false; // When mouse goes up, set isDown to false
-            });
-
-        $(".spreadsheet-item").mouseover(function() {
-            if (isDown) { // Only change css if mouse is down
-                $(this).addClass('selected');
-            }
-        });
-
-        $(".spreadsheet-item").mousedown(selection);
-
-
-        function selection() {
-            // TODO
+        function selectCells() {
+            var col = $(this).parent().children().index($(this));
+            var row = $(this).parent().parent().children().index($(this).parent());
             var $this = $(this);
-            var $col = $this.parent().children().index($this);
-            var $row = $this.parent().parent().children().index($this.parent());
-
-            // clean STYLE 
+            var $parent = $this.parent();
+            var $firstRow = $(this).closest('table').children('tr:first');
+            // clean style
             $('.spreadsheet-item').removeClass('selected');
-            var $parent = $this.parents('tr');
 
-            // select all 
-            if ($col === 0 && $row === 0) {
+            // left angle
+            if (col === 0 && row === 0) {
                 $('.spreadsheet-item').addClass('selected');
-            }
-            // select cell
-            if ($this.hasClass('spreadsheet-cell')) {
-                $this.addClass('selected');
-                $parent.find('.spreadsheet-header').addClass('selected');
-                $('table tr').eq(0).find('th').eq($col).addClass('selected');
             }
 
             // select row
-            if ($row > 0 && $col === 0) {
+            if (row > 0 && col === 0) {
                 $parent.find('.spreadsheet-item').addClass('selected');
+                // first row 
+                $firstRow.children('.spreadsheet-item:not(:eq(0))').addClass('selected');
             }
 
-            // select col
-            if ($row === 0 && $col > 0) {
+            // select columns
+            if (row === 0 && col > 0) {
+                for (var i = 0; i <= rows; i++) {
+                    if (i > 0) {
+                        $('table tr').eq(i).find('.spreadsheet-item').eq(0).addClass('selected');
+                    }
+                    $('table tr').eq(i).find('.spreadsheet-item').eq(col).addClass('selected');
+                }
+            }
 
-                $this.addClass('selected');
-                $("tr").each(function(index, element) {
-                    $(element).find('.spreadsheet-item').eq($col).addClass('selected');
-                });
+            // select cell
+            if (row > 0 && col > 0) {
+                $firstRow.find('.spreadsheet-item').eq(col).addClass('selected');
+                $('table tr').eq(row).find('.spreadsheet-item').eq(0).addClass('selected');
+                $('table tr').eq(row).find('.spreadsheet-item').eq(col).addClass('selected');
             }
         }
 
+        // dragging 
+        // here is how you can detect dragging in all four directions
+        var isDragging = false;
+        $(".spreadsheet-item").mousedown(function(e) {
+            var previous_x_position = e.pageX;
+            var previous_y_position = e.pageY;
 
-        // TODO
-        function dragging(element, start, last) {
+            $(window).mousemove(function(event) {
+                isDragging = true;
+                var x_position = event.pageX;
+                var y_position = event.pageY;
 
-            var $this = $(element);
-            var $col = $this.parent().children().index($this);
-            var $row = $this.parent().parent().children().index($this.parent());
+                if (previous_x_position < x_position) {
+                    alert('moving right');
+                } else {
+                    alert('moving left');
+                }
+                if (previous_y_position < y_position) {
+                    alert('moving down');
+                } else {
+                    alert('moving up');
+                }
+                $(window).unbind("mousemove");
+            });
+        }).mouseup(function() {
+            var wasDragging = isDragging;
+            isDragging = false;
+            $(window).unbind("mousemove");
+        });
 
-
-        }
 
 
     };
