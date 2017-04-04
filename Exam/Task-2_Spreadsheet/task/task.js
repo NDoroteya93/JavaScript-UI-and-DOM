@@ -78,40 +78,72 @@ function solve() {
             .append(df.html())
             .appendTo(element);
 
-        // $('.spreadsheet-item').on('click', function() {
-        //     // TODO
-        //     // clean STYLE 
-        //     $('.spreadsheet-item').removeClass('selected');
-        //     var $parent = $(this).parents('tr');
-        //     var $this = $(this);
-        //     var dataRow = $parent.attr('data-row');
-        //     var dataCol = $this.attr('data-col');
-        //     if ($this.hasClass('spreadsheet-header')) {
+        var isDown = false;
+        var firstEl, lastEl;
 
-        //         // check if is header
-        //         if ($parent.is(':first-child')) {
-        //             if ($this.is(':empty')) {
-        //                 $('.spreadsheet-item').addClass('selected');
-        //             } else {
-        //                 $('[data-col=' + dataCol + ']').addClass('selected');
-        //                 $('[data-col=0]').addClass('selected');
-        //             }
+        // TODO
+        $(document).mousedown(function() {
+                isDown = true; // When mouse goes down, set isDown to true
+            })
+            .mouseup(function() {
+                isDown = false; // When mouse goes up, set isDown to false
+            });
 
-        //         }
-        //     }
-        //     // cells
-        //     if ($this.hasClass('spreadsheet-cell')) {
-        //         $parent.find('.spreadsheet-header').addClass('selected');
-        //         $('tr[data-row=0] th[data-col=' + dataCol + ']').addClass('selected');
-        //         $this.addClass('selected');
-        //     }
-        // });
-
-        // clicking
-        $('.spreadsheet-cell').on('dblclick', function() {
-            var $this = $(this);
-            $this.find('input').css('display', '');
+        $(".spreadsheet-item").mouseover(function() {
+            if (isDown) { // Only change css if mouse is down
+                $(this).addClass('selected');
+            }
         });
+
+        $(".spreadsheet-item").mousedown(selection);
+
+
+        function selection() {
+            // TODO
+            var $this = $(this);
+            var $col = $this.parent().children().index($this);
+            var $row = $this.parent().parent().children().index($this.parent());
+
+            // clean STYLE 
+            $('.spreadsheet-item').removeClass('selected');
+            var $parent = $this.parents('tr');
+
+            // select all 
+            if ($col === 0 && $row === 0) {
+                $('.spreadsheet-item').addClass('selected');
+            }
+            // select cell
+            if ($this.hasClass('spreadsheet-cell')) {
+                $this.addClass('selected');
+                $parent.find('.spreadsheet-header').addClass('selected');
+                $('table tr').eq(0).find('th').eq($col).addClass('selected');
+            }
+
+            // select row
+            if ($row > 0 && $col === 0) {
+                $parent.find('.spreadsheet-item').addClass('selected');
+            }
+
+            // select col
+            if ($row === 0 && $col > 0) {
+
+                $this.addClass('selected');
+                $("tr").each(function(index, element) {
+                    $(element).find('.spreadsheet-item').eq($col).addClass('selected');
+                });
+            }
+        }
+
+
+        // TODO
+        function dragging(element, start, last) {
+
+            var $this = $(element);
+            var $col = $this.parent().children().index($this);
+            var $row = $this.parent().parent().children().index($this.parent());
+
+
+        }
 
 
     };
